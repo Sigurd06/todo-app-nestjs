@@ -21,7 +21,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "typeorm:migration:generate": "rimraf src/infrastructure/config/database/migrations/ && npm run typeorm -- migration:generate -n",
-    "typeorm:migration:run": "npm run typeorm -- migration:run"
+    "typeorm:migration:run": "npm run typeorm -- migration:run",
+    "compodoc": "compodoc -p tsconfig.json -s -r 5000"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
@@ -40,6 +41,7 @@
     "typeorm": "^0.2.45"
   },
   "devDependencies": {
+    "@compodoc/compodoc": "^1.1.19",
     "@nestjs/cli": "^8.0.0",
     "@nestjs/schematics": "^8.0.0",
     "@nestjs/testing": "^8.0.0",
