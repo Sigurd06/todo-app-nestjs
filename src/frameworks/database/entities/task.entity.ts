@@ -18,6 +18,12 @@ export class Task {
   @Column({ nullable: false })
   public readonly description: string;
 
+  @Column({ default: false })
+  public readonly completed: boolean;
+
+  @Column({ default: false })
+  public readonly important: boolean;
+
   @CreateDateColumn()
   public readonly createdAt: Date;
 

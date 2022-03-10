@@ -3,13 +3,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { IDatabaseAbstract } from 'src/core/abstracts';
 import { Repository } from 'typeorm';
 import { Task } from './entities';
-import { PgGenericRepository } from './pg-generic.repository';
+import { PgTaskRepository } from './repositories';
 
 @Injectable()
 export class PgDatabaseService
   implements IDatabaseAbstract, OnApplicationBootstrap
 {
-  public task: PgGenericRepository<Task>;
+  public task: PgTaskRepository<Task>;
 
   constructor(
     @InjectRepository(Task)
@@ -17,6 +17,6 @@ export class PgDatabaseService
   ) {}
 
   public onApplicationBootstrap() {
-    this.task = new PgGenericRepository<Task>(this.taskRepository);
+    this.task = new PgTaskRepository<Task>(this.taskRepository);
   }
 }

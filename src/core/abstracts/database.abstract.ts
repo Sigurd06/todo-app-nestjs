@@ -1,6 +1,6 @@
 import { Task } from '../models';
-import { IGenericRepository } from './generic-repository.abstract';
+import { ITaskRepository } from './task-reposotiry.abstract';
 
 export abstract class IDatabaseAbstract {
-  public abstract readonly task: IGenericRepository<Task>;
+  public abstract readonly task: ITaskRepository<Task>;
 }
