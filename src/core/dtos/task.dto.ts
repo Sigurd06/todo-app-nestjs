@@ -32,9 +32,18 @@ export class ResposeCreateTaskDto extends ResponseFormat<any> {
   data: TaskSerializer;
 }
 
-export class ResponseTasksDto extends ResponseFormat<any> {
+class ResponseTasksPaginate {
   @ApiProperty({ type: [TaskSerializer] })
-  data: TaskSerializer[];
+  results: TaskSerializer[];
+  @ApiProperty()
+  totalResults: number;
+  @ApiProperty()
+  totalPages: number;
+}
+
+export class ResponseTasksDto extends ResponseFormat<any> {
+  @ApiProperty()
+  data: ResponseTasksPaginate;
 }
 
 export class ResponseTaskByIdDto extends ResponseFormat<any> {

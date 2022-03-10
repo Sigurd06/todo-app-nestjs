@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { ExceptionsService } from 'src/configuration/exceptions/exceptions.service';
 import { IDatabaseAbstract } from 'src/core/abstracts';
 import { TaskCreateDto, TaskUpdateDto } from 'src/core/dtos';
+import { PaginationDto } from 'src/core/dtos/pagination.dto';
+import { Pagination } from '../common/function/pagination.func';
 import { TaskFactoryService } from './task-factory.service';
 
 @Injectable()
@@ -12,11 +14,19 @@ export class TaskService {
     private readonly taskFactoryService: TaskFactoryService,
   ) {}
 
-  public async findAll() {
-    const allTask = await this.databaseService.tasks.findAll();
-    if (!allTask)
+  public async findAll({ page, quantity }: PaginationDto) {
+    const allTask = await this.databaseService.tasks.findAllPaginate(
+      page,
+      quantity,
+    );
+    if (!allTask[0].length)
       this.exception.notFoundException({ message: 'Tasks not founded' });
-    return allTask;
+
+    return {
+      results: allTask[0],
+      totalResults: allTask[1],
+      totalPages: Pagination.getTotalPagesForPagination(allTask[1], quantity),
+    };
   }
 
   public async findById(id: string) {

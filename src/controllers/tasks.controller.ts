@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { plainToClass } from 'class-transformer';
@@ -17,6 +18,7 @@ import {
   TaskUpdateDto,
   ResponseForUpdateOrDelete,
 } from 'src/core/dtos';
+import { PaginationDto } from 'src/core/dtos/pagination.dto';
 import { TaskSerializer, TaskSerializerById } from 'src/core/serializers';
 import { TaskService } from 'src/services/use-cases/tasks/task-service.service';
 
@@ -27,19 +29,24 @@ export class TasksController {
 
   @Get()
   @ApiOkResponse({ type: ResponseTasksDto })
-  public async findAll() {
-    const allTask = await this.taskService.findAll();
+  public async findAll(@Query() pagination: PaginationDto) {
+    const { results, totalPages, totalResults } =
+      await this.taskService.findAll(pagination);
 
     const taskSerializes: TaskSerializer[] = [];
 
-    for (const iterator of allTask) {
+    for (const iterator of results) {
       taskSerializes.push(
         plainToClass(TaskSerializer, iterator, {
           excludeExtraneousValues: true,
         }),
       );
     }
-    return taskSerializes;
+    return {
+      results: taskSerializes,
+      totalPages,
+      totalResults,
+    };
   }
 
   @Get(':id')
