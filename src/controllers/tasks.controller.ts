@@ -21,8 +21,8 @@ import { TaskSerializer, TaskSerializerById } from 'src/core/serializers';
 import { TaskService } from 'src/services/use-cases/tasks/task-service.service';
 
 @ApiTags('Tasks')
-@Controller('task')
-export class TaskController {
+@Controller('tasks')
+export class TasksController {
   constructor(private readonly taskService: TaskService) {}
 
   @Get()
@@ -68,14 +68,14 @@ export class TaskController {
     @Param('id') id: string,
     @Body() body: TaskUpdateDto,
   ) {
-    this.taskService.updateTask(id, body);
+    await this.taskService.updateTask(id, body);
     return 'task updated successfully';
   }
 
   @Delete(':id')
   @ApiOkResponse({ type: ResponseForUpdateOrDelete })
   public async deleteTask(@Param('id') id: string) {
-    this.taskService.deleteTask(id);
+    await this.taskService.deleteTask(id);
     return 'task deleted successfully';
   }
 }

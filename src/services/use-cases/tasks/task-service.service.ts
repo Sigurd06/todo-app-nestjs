@@ -12,28 +12,33 @@ export class TaskService {
     private readonly taskFactoryService: TaskFactoryService,
   ) {}
 
-  findAll() {
-    return this.databaseService.task.findAll();
+  public async findAll() {
+    const allTask = await this.databaseService.tasks.findAll();
+    if (!allTask)
+      this.exception.notFoundException({ message: 'Tasks not founded' });
+    return allTask;
   }
 
-  async findById(id: string) {
-    const task = await this.databaseService.task.findById(id);
+  public async findById(id: string) {
+    const task = await this.databaseService.tasks.findById(id);
     if (!task) {
       this.exception.notFoundException({ message: 'Task not found' });
     }
     return task;
   }
 
-  createTask(taskCreateDto: TaskCreateDto) {
+  public async createTask(taskCreateDto: TaskCreateDto) {
     const task = this.taskFactoryService.createTask(taskCreateDto);
-    return this.databaseService.task.create(task);
+    return this.databaseService.tasks.create(task);
   }
 
-  updateTask(id: string, item: TaskUpdateDto) {
-    this.databaseService.task.update(id, item);
+  public async updateTask(id: string, item: TaskUpdateDto) {
+    const task = await this.findById(id);
+    this.databaseService.tasks.update(task.id, item);
   }
 
-  deleteTask(id: string) {
-    this.databaseService.task.delete(id);
+  public async deleteTask(id: string) {
+    const task = await this.findById(id);
+    this.databaseService.tasks.delete(task.id);
   }
 }

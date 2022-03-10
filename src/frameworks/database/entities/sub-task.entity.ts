@@ -5,32 +5,25 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-  OneToMany,
+  ManyToOne,
 } from 'typeorm';
-import { SubTasks } from './sub-task.entity';
+import { Tasks } from './task.entity';
 
-@Entity('tasks')
-export class Tasks {
+@Entity('sub_tasks')
+export class SubTasks {
   @PrimaryGeneratedColumn('uuid')
   public readonly id: string;
 
   @Column()
   public readonly title: string;
 
-  @Column({ nullable: false })
-  public readonly description: string;
-
   @Column({ default: false })
   public readonly completed: boolean;
 
-  @Column({ default: false })
-  public readonly important: boolean;
-
-  @OneToMany((_) => SubTasks, (subTask) => subTask.parentTask, {
+  @ManyToOne((_) => Tasks, (task) => task.tasksChildren, {
     onDelete: 'CASCADE',
-    cascade: true,
   })
-  public readonly tasksChildren: SubTasks[];
+  public readonly parentTask: Tasks;
 
   @CreateDateColumn()
   public readonly createdAt: Date;

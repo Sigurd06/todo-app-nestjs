@@ -2,7 +2,7 @@ import { IGenericRepository } from 'src/core/abstracts';
 import { Repository } from 'typeorm';
 
 export class PgGenericRepository<T> implements IGenericRepository<T> {
-  private _repository: Repository<T>;
+  public _repository: Repository<T>;
 
   constructor(repository: Repository<T>) {
     this._repository = repository;
@@ -10,9 +10,6 @@ export class PgGenericRepository<T> implements IGenericRepository<T> {
 
   public async findAll(): Promise<T[]> {
     return this._repository.find();
-  }
-  public async findOne(condition: string): Promise<T> {
-    return this._repository.findOne({ where: { condition } });
   }
   public async findById(id: string): Promise<T> {
     return this._repository.findOne({ where: { id } });
@@ -25,6 +22,6 @@ export class PgGenericRepository<T> implements IGenericRepository<T> {
   }
 
   public async delete(id: string): Promise<void> {
-    this._repository.softDelete(id);
+    this._repository.delete(id);
   }
 }
